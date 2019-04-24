@@ -4,6 +4,8 @@
 
 You may access a running instance of the project at: http://hilton.rasterized.net
 
+Note: Does not work on Edge/IE browser due to the use of FormData object. Would have to find an alternative.
+
 ## Before you begin
 
 This application has been developed using node version 8.16.0. A useful utility for switching between node versions is nvm.
