@@ -1,0 +1,27 @@
+$brand-primary: rgb(16, 76, 151);
+$brand-secondary: rgb(0, 156, 222);
+
+$background-default: rgb(255, 255, 255);
+$background-light: rgb(218, 242, 252);
+$background-medium: rgb(235, 235, 235);
+$background-dark: $brand-primary;
+
+$font-header: rgb(47, 46, 42);
+$font-default: rgb(81, 80, 73);
+$font-light: rgb(218, 242, 252);
+$font-medium: rgb(102, 102, 102);
+$font-dark: rgb(29, 29, 29);
+
+$font-dark-blue: $brand-primary;
+$font-light-blue: $brand-secondary;
+
+$link-font: $font-dark-blue;
+$link-font-hover: $font-medium;
+
+$border-color: $font-dark;
+
+$input-background: $background-medium;
+$input-font: $font-dark;
+
+$button-font-secondary: $font-light;
+$button-background-secondary: $background-dark;

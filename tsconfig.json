@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": ".next",
+    "sourceMap": true,
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noEmit": true,
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "paths": {
+      "*": [
+        "./node_modules/*",
+        "./typings/*"
+      ]
+    }
+  },
+  "include": [
+    "./**/*",
+    "./typings/*"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "commonjs",
+    "target": "es2017",
+    "lib": ["es2017"],
+    "outDir": ".next",
+    "paths": {
+      "*": [
+        "./node_modules/*",
+        "./typings/*"
+      ]
+    }
+  },
+  "include": [
+    "./**/*",
+    "./typings/*"
+  ],
+  "exclude": [".next"]
+}

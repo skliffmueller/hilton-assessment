@@ -1,0 +1,160 @@
+@import 'variables.scss';
+
+.Reservations {
+  background: $background-default;
+  padding: 8px;
+  margin: 12px;
+  border-radius: 3px;
+  min-width: 320px;
+  max-width: 420px;
+}
+
+.Form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0 6px;
+  .Form-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .Form-date {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .Form-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin: 0 4px;
+    width: 100%;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  input {
+    font-size: 0.95rem;
+    border: 1px solid rgb(151, 151, 151);
+    color: rgb(96, 96, 96);
+    padding: 4px;
+    min-width: 150px;
+    &:focus {
+      border-color: $brand-secondary;
+      outline-color: $brand-secondary;
+    }
+  }
+  label {
+    color: rgb(92, 92, 92);
+    margin-bottom: 4px;
+  }
+  .Form-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  button {
+    font-family: Arial,sans-serif;
+    background: $brand-primary;
+    font-weight: 700;
+    border: 0;
+    border-radius: 2px;
+    color: #FFF;
+    display: inline-block;
+    font-size: 0.95em;
+    padding: 9px 18px;
+    text-align: center;
+    text-decoration: none;
+    align-self: flex-end;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+}
+
+.ReservationTools {
+  min-width: 320px;
+  max-width: 420px;
+  margin: 12px auto;
+}
+
+.ReservationsList {
+  display: flex;
+  flex-direction:column;
+  min-width: 320px;
+  max-width: 420px;
+  margin: 12px auto;
+}
+
+.Reservation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  margin: 6px;
+  min-width: 320px;
+  max-width: 420px;
+  border-bottom: solid 1px $border-color;
+
+  .Reservation-Content {
+    margin: 8px;
+    h4 {
+      margin: 0;
+    }
+    p {
+      margin: 0;
+    }
+  }
+  .Reservation-Dates {
+    display: flex;
+    flex-direction: row;
+    h5 {
+      margin: 0;
+    }
+  }
+  .Reservation-Date {
+    margin: 8px;
+  }
+}
+
+.ReservationsDate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $font-dark;
+  font-size: 0.875rem;
+  font-weight: 700;
+  .ReservationsDate-Day {
+    color: $font-dark-blue;
+    font-size: 2.625rem;
+  }
+  .ReservationsDate-Stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ReservationsDate-Month {
+  }
+  .ReservationsDate-Week {
+    font-weight: 400;
+  }
+}
+
+@media only screen and (min-width: 480px) {
+  .Reservation {
+    flex-direction: row;
+  }
+}
