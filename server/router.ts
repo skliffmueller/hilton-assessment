@@ -1,11 +1,11 @@
-import * as express from 'express'
-import { Application } from 'express'
-import API from './api/index'
+import * as express from 'express';
+import { Application } from 'express';
+import API from './api/index';
 
 
 class Router {
-  public router;
-  public api;
+  public router: express.Router;
+  public api: API;
 
   constructor() {
     this.router = express.Router();

@@ -1,3 +1,4 @@
+import React from 'react';
 import App from '../components/App';
 import Reservations from '../components/Reservations';
 

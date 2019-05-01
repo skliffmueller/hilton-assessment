@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { graphql } from 'graphql';
-import * as gql from 'gql-query-builder'
+import * as gql from 'gql-query-builder';
 import schema from '../../schemas/index';
 import { IGetReservationsOptions } from 'reservations-types';
 
@@ -55,7 +55,6 @@ class ReservationsController {
         'departureDate',
       ],
     });
-    console.log(query);
     graphql({
       schema,
       source: query.query,

@@ -1,7 +1,7 @@
-import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
-import fetch from 'isomorphic-unfetch'
+import { ApolloClient, InMemoryCache, HttpLink, NormalizedCacheObject } from 'apollo-boost';
+import fetch from 'isomorphic-unfetch';
 
-function create (initialState?) {
+function create (initialState?: NormalizedCacheObject) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient({
     link: new HttpLink({
@@ -12,6 +12,6 @@ function create (initialState?) {
   })
 }
 
-export default function initApollo (initialState?) {
+export default function initApollo (initialState?: NormalizedCacheObject) {
     return create(initialState);
 }

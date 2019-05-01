@@ -1,9 +1,9 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import Reservations from './reservations/index';
 
 class API {
-  public router;
-  public reservations;
+  public router: Router;
+  public reservations: Reservations;
 
   constructor(router: Router) {
     this.router = router;

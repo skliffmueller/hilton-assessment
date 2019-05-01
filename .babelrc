@@ -1,6 +1,27 @@
 {
-  "presets": [
-    "next/babel",
-    "@zeit/next-typescript/babel"
-  ]
+  "env": {
+    "development": {
+      "presets": [
+        "next/babel",
+        "@zeit/next-typescript/babel"
+      ]
+    },
+    "production": {
+      "presets": [
+        "next/babel",
+        "@zeit/next-typescript/babel"
+      ]
+    },
+    "test": {
+      "plugins": [
+        ["transform-es2015-modules-commonjs"],
+        "@babel/proposal-class-properties",
+        "@babel/proposal-object-rest-spread"
+      ],
+      "presets": [
+        "next/babel",
+        "@zeit/next-typescript/babel"
+      ]
+    }
+  }
 }

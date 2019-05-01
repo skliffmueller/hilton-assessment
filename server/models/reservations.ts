@@ -1,4 +1,5 @@
-import { IReservation, ICreateReservation, IGetReservationsOptions } from "reservations-types";
+/// <reference path="../../typings/reservations.d.ts" />
+import { IReservation, ICreateReservation, IGetReservationsOptions } from 'reservations-types';
 
 class ReservationsModel {
   public lastId: number;
@@ -21,19 +22,18 @@ class ReservationsModel {
     let response = this.reservations.sort((a, b) => (sortOrder === 'DESC' ? b.id - a.id : a.id - b.id));
     if(sortField && sortField !== 'id') {
       response = response.sort((a, b) => {
-        if(typeof a[sortField] === 'string') {
-          a[sortField] = a[sortField].toLowerCase();
+        let sortNumber = 0;
+        let aValue = a[sortField];
+        let bValue = b[sortField];
+        if(typeof aValue === 'string' && typeof bValue === 'string') {
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+          sortNumber = bValue.localeCompare(aValue);
         }
-        if(typeof b[sortField] === 'string') {
-          b[sortField] = b[sortField].toLowerCase();
+        if(typeof aValue === 'number' && typeof bValue === 'number') {
+          sortNumber = aValue - bValue;
         }
-        if(a[sortField] - b[sortField]) {
-          return sortOrder === 'DESC' ? 1 : -1;
-        }
-        if(a[sortField] - b[sortField]) {
-          return sortOrder === 'DESC' ? -1 : 1;
-        }
-        return 0;
+        return sortNumber * (sortOrder === 'DESC' ? 1 : -1)
       })
     }
     return response;

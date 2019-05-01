@@ -1,9 +1,9 @@
-import { Router } from 'express'
+import { Router } from 'express';
 
 import ReservationsController from './controller';
 
 class Reservations {
-  public controller;
+  public controller: ReservationsController;
 
   constructor() {
     this.controller = new ReservationsController();

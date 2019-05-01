@@ -1,14 +1,11 @@
-import App, { Container } from 'next/app';
-import * as React from "react";
-import withApolloClient from '../lib/with-apollo-client'
-import { ApolloProvider } from "react-apollo";
-import ApolloClient from "apollo-client/ApolloClient";
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
+import {AppProps, Container, DefaultAppIProps} from 'next/app';
 
-interface IMyApp {
-  apolloClient: ApolloClient<any>;
-}
+import withApolloClient, {IApolloProps} from '../lib/with-apollo-client';
 
-class MyApp extends App<IMyApp> {
+
+class MyApp extends React.Component<IApolloProps & DefaultAppIProps & AppProps> {
   render() {
     const { Component, pageProps, apolloClient } = this.props;
     return (

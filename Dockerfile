@@ -12,7 +12,6 @@ RUN npm install
 # Everything except from .dockerignore is copied
 ADD ./ .
 
-# webpack build
 RUN npm run build
 
 EXPOSE 3000

@@ -1,13 +1,13 @@
 /// <reference path="../typings/reservations.d.ts" />
-import { ApolloConsumer } from 'react-apollo'
-import { Query } from 'react-apollo'
+import React, { FormEvent } from 'react';
+import { ApolloConsumer, Query, QueryResult } from 'react-apollo';
+import { NormalizedCacheObject, ApolloClient } from 'apollo-boost';
 import gql from 'graphql-tag'
 
-import { IReservation } from "reservations-types";
+import {ICreateReservation, IReservation} from "reservations-types";
 
 import './Reservations.scss';
-import ApolloClient from "apollo-client/ApolloClient";
-import {FormEvent} from "react";
+
 
 export const reservationsQuery = gql`
   query getReservations($sortField: ReservationSortField, $sortOrder: SortOrder) {
@@ -44,8 +44,13 @@ export const reservationsVars = {
 };
 const weekIndex = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthIndex = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-export const ReservationDate = ({ date }) => {
-  if(typeof date === 'string') {
+
+export interface IReservationDate {
+  date: string | number | Date;
+}
+
+export const ReservationDate = ({ date }: IReservationDate) => {
+  if(typeof date === 'string' || typeof date === 'number') {
     date = new Date(date);
   }
   const day = date.getUTCDate();
@@ -83,27 +88,75 @@ export const Reservation = ({ id, name, hotelName, arrivalDate, departureDate }:
   )
 }
 
-function handleCreateClick(event: FormEvent, client: ApolloClient<any>) {
+export interface IReservationForm {
+  onSubmit: (event: FormEvent) => void;
+}
+
+export const ReservationForm = ({ onSubmit }: IReservationForm) => {
+  return (
+    <form className="Form" onSubmit={onSubmit}>
+      <div className="Form-element">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Full Name" />
+      </div>
+      <div className="Form-element">
+        <label>Hotel Name</label>
+        <input type="text" name="hotelName" placeholder="Hotel Name" />
+      </div>
+
+      <div className="Form-date">
+        <div className="Form-column">
+          <label>Arrival Date</label>
+          <input type="date" name="arrivalDate" placeholder="Arrival Date" />
+        </div>
+        <div className="Form-column">
+          <label>Departure Date</label>
+          <input type="date" name="departureDate" placeholder="Departure Date" />
+        </div>
+      </div>
+
+      <div className="Form-button">
+        <button type="submit">Create Reservation</button>
+      </div>
+    </form>
+  );
+}
+
+function handleCreateClick(event: FormEvent, client: ApolloClient<NormalizedCacheObject>) {
   event.preventDefault();
   const form = (event.target as HTMLFormElement);
-  // @ts-ignore
   const formData = new FormData(form);
-  // @ts-ignore
   form.reset();
 
-  createReservation({
-    name: formData.get('name'),
-    hotelName: formData.get('hotelName'),
-    arrivalDate: formData.get('arrivalDate'),
-    departureDate: formData.get('departureDate'),
-  }, client);
+  let invalid = false;
+  const parsedData: ICreateReservation = {
+    name: '',
+    hotelName: '',
+    arrivalDate: '',
+    departureDate: '',
+  };
+  Object.keys(parsedData).forEach(key => {
+    const value = formData.get(key);
+    if(value && typeof value === 'string') {
+      (parsedData as any)[key] = value;
+    } else {
+      invalid = true;
+    }
+  });
+  if(!invalid) {
+    createReservation(parsedData, client);
+  }
+}
+
+export interface IReservationsResult {
+  reservations: IReservation[];
 }
 
 export default function Reservations() {
   return (
     <Query query={reservationsQuery} variables={reservationsVars}>
-      {({ loading, error, data: { reservations } }) => {
-        if (error) return (
+      {({ loading, error, networkStatus, data }: QueryResult<IReservationsResult>) => {
+        if (error || !data) return (
           <div className="Reservations">
             <h5>Error</h5>
           </div>
@@ -118,37 +171,11 @@ export default function Reservations() {
           <div className="Reservations">
             <div className="ReservationTools">
               <ApolloConsumer>
-                {client => (
-                  <form className="Form" onSubmit={event => handleCreateClick(event, client)}>
-                    <div className="Form-element">
-                      <label>Full Name</label>
-                      <input type="text" name="name" placeholder="Full Name" />
-                    </div>
-                    <div className="Form-element">
-                      <label>Hotel Name</label>
-                      <input type="text" name="hotelName" placeholder="Hotel Name" />
-                    </div>
-
-                    <div className="Form-date">
-                      <div className="Form-column">
-                        <label>Arrival Date</label>
-                        <input type="date" name="arrivalDate" placeholder="Arrival Date" />
-                      </div>
-                      <div className="Form-column">
-                        <label>Departure Date</label>
-                        <input type="date" name="departureDate" placeholder="Departure Date" />
-                      </div>
-                    </div>
-
-                    <div className="Form-button">
-                      <button type="submit">Create Reservation</button>
-                    </div>
-                  </form>
-                )}
+                {client => (<ReservationForm onSubmit={(event: FormEvent) => handleCreateClick(event, client)} />)}
               </ApolloConsumer>
             </div>
             <div className="ReservationsList">
-              {reservations.map(
+              {data.reservations.map(
                 (reservation) =>
                   (<Reservation key={reservation.id} {...reservation} />)
               )}
@@ -159,9 +186,12 @@ export default function Reservations() {
     </Query>
   )
 }
+export interface ICreateReservationMutation {
+  reservation: IReservation;
+}
 
-function createReservation({ name, hotelName, arrivalDate, departureDate }, client) {
-  client.mutate({
+function createReservation({ name, hotelName, arrivalDate, departureDate }: ICreateReservation, client: ApolloClient<any>) {
+  client.mutate<ICreateReservationMutation>({
     mutation: reservationsMutation,
     variables: {
       name,
@@ -169,19 +199,24 @@ function createReservation({ name, hotelName, arrivalDate, departureDate }, clie
       arrivalDate,
       departureDate,
     },
-    update: (proxy, { data: { reservation } }) => {
-      const data = proxy.readQuery({
-        query: reservationsQuery,
-        variables: reservationsVars
-      })
-      proxy.writeQuery({
-        query: reservationsQuery,
-        data: {
-          ...data,
-          reservations: [reservation, ...data.reservations]
-        },
-        variables: reservationsVars
-      })
+    update: (proxy, { data }) => {
+      if(data) {
+        const { reservation } = data;
+        const prevData = proxy.readQuery<IReservationsResult>({
+          query: reservationsQuery,
+          variables: reservationsVars,
+        });
+        if(prevData) {
+          proxy.writeQuery<IReservationsResult>({
+            query: reservationsQuery,
+            data: {
+              ...data,
+              reservations: [reservation, ...prevData.reservations]
+            },
+            variables: reservationsVars,
+          })
+        }
+      }
     }
   });
 }

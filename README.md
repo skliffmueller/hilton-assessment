@@ -1,5 +1,13 @@
 # Hilton Hotel Assessment
 
+## WARNING: Bug in recent version of next.js
+
+There is an issue with acorn, webpack, and next.js latest versions. Seems it produces an error relating to issuer of null, yelling about import('./noop')
+
+Related ticket: https://github.com/zeit/next.js/issues/6240
+
+The solution, npm install acorn, then npm install next@latest, resolved the issue. But people are getting inconsistent results
+
 ## Demo
 
 You may access a running instance of the project at: http://hilton.rasterized.net
@@ -51,6 +59,19 @@ To make a production build run the following:
 ```bash
 NODE_ENV=production npm run build
 ```
+
+## Jest unit test
+
+To perform a jest unit test, run the following:
+
+```bash
+npm run test
+```
+
+The unit tests currently support:
+- Reservation React functional renderers
+- Express /api/reservations endpoints
+- GraphQL /graphql reservations queries and mutations 
 
 ## Deployment
 

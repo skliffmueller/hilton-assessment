@@ -1,20 +1,20 @@
-import * as express from 'express'
-import * as path from 'path'
-import { ApolloServer } from 'apollo-server-express'
+import * as express from 'express';
+import { Application } from 'express';
+import * as path from 'path';
+import { ApolloServer } from 'apollo-server-express';
+import { Server as nextServer } from 'next';
 
-import schema from './schemas/index'
-import Router from './router'
-
-
+import schema from './schemas/index';
+import Router from './router';
 
 class Server {
-  public app;
-  public apollo;
-  public router;
-  public handle;
+  public app: Application;
+  public apollo: ApolloServer;
+  public router: Router;
+  public handler: nextServer["handleRequest"];
 
-  constructor(nextHandler) {
-    this.handle = nextHandler;
+  constructor(nextHandler: nextServer["handleRequest"]) {
+    this.handler = nextHandler;
     this.app = express();
     this.apollo = new ApolloServer({
       schema,
@@ -37,9 +37,7 @@ class Server {
 
   private routes(): void {
     this.router.mount(this.app);
-    this.app.get('*', (req, res) => {
-      return this.handle(req, res);
-    })
+    this.app.get('*', (req, res) => this.handler(req, res));
   }
 }
 

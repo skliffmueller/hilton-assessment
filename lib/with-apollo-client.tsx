@@ -1,28 +1,36 @@
-import React from 'react'
-import initApollo from './init-apollo'
-import Head from 'next/head'
-import { getDataFromTree } from 'react-apollo'
+import React from 'react';
+import { getDataFromTree } from 'react-apollo';
+import Head from 'next/head';
+import { AppComponentType, AppProps, DefaultAppIProps, NextAppContext } from 'next/app';
+import { ApolloClient, NormalizedCacheObject } from 'apollo-boost';
 
-export default App => {
-  return class Apollo extends React.Component {
-    public apolloClient;
-    static displayName = 'withApollo(App)'
-    static async getInitialProps (ctx) {
-      const { Component, router } = ctx
+import initApollo from './init-apollo'
+
+export interface IApolloProps {
+  apolloState?: NormalizedCacheObject;
+  apolloClient: ApolloClient<NormalizedCacheObject>;
+}
+
+export default (MyApp: AppComponentType<IApolloProps & DefaultAppIProps>) => {
+  return class Apollo extends React.Component<IApolloProps & DefaultAppIProps & AppProps> {
+    public apolloClient: ApolloClient<NormalizedCacheObject>;
+    static displayName = 'withApollo(App)';
+    static async getInitialProps (ctx: NextAppContext) {
+      const { Component, router } = ctx;
 
       let appProps = {}
-      if (App.getInitialProps) {
-        appProps = await App.getInitialProps(ctx)
+      if (MyApp.getInitialProps) {
+        appProps = await MyApp.getInitialProps(ctx)
       }
-
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
       const apollo = initApollo();
       try {
         // Run all GraphQL queries
         await getDataFromTree(
-      <App
+      <MyApp
             {...appProps}
+            pageProps={{}}
             Component={Component}
             router={router}
             apolloClient={apollo}
@@ -37,25 +45,28 @@ export default App => {
 
       // getDataFromTree does not call componentWillUnmount
       // head side effect therefore need to be cleared manually
-      Head.rewind()
+      Head.rewind();
 
 
       // Extract query data from the Apollo store
-      const apolloState = apollo.cache.extract()
+      const apolloState = apollo.cache.extract();
 
       return {
         ...appProps,
-        apolloState
+        apolloState,
       }
     }
 
-    constructor (props) {
-      super(props)
-      this.apolloClient = initApollo(props.apolloState)
+    constructor (props: IApolloProps & DefaultAppIProps & AppProps) {
+      super(props);
+      this.apolloClient = initApollo(props.apolloState);
     }
 
     render () {
-      return <App {...this.props} apolloClient={this.apolloClient} />
+      return <MyApp
+        {...this.props}
+        apolloClient={this.apolloClient}
+      />
     }
   }
 }

@@ -3,19 +3,27 @@ declare module "reservations-types" {
     id: number,
     name: string,
     hotelName: string,
-    arrivalDate: Date,
-    departureDate: Date,
+    arrivalDate: string | number | Date,
+    departureDate: string | number | Date,
   }
 
   export interface ICreateReservation {
     name: string,
     hotelName: string,
-    arrivalDate: Date,
-    departureDate: Date,
+    arrivalDate: string | number | Date,
+    departureDate: string | number | Date,
+  }
+
+  export enum ReservationFields {
+    id = "id",
+    name = "name",
+    hotelName = "hotelName",
+    arrivalDate = "arrivalDate",
+    departureDate = "departureDate",
   }
 
   export interface IGetReservationsOptions {
-    sortField?: string,
+    sortField?: ReservationFields,
     sortOrder?: string,
   }
 }

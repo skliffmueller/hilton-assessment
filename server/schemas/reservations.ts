@@ -13,7 +13,8 @@ import {
   GraphQLSortOrder,
 } from './scalars';
 
-import { IGetReservationsOptions, IReservation } from "reservations-types";
+import { ICreateReservation, IGetReservationsOptions } from 'reservations-types';
+
 import reservationsModel from '../models/reservations';
 
 
@@ -95,7 +96,7 @@ export const ReservationsMutationType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLDate),
         },
       },
-      resolve: async (rootValue, input: IReservation) => reservationsModel.createReservation(input),
+      resolve: async (rootValue, input) => reservationsModel.createReservation(input as ICreateReservation),
     }
   }
 })
